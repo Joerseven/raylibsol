@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11)
 project (nook-bindings)
 
 set(RAY_DIR vendor/raylib)
-add_subdirectory(RAY_DIR)
+add_subdirectory(${RAY_DIR})
 
 set(LUA_DIR vendor/lua)
 set(LUA_SRC
@@ -10,7 +10,7 @@ set(LUA_SRC
     ${LUA_DIR}/lcode.c
     ${LUA_DIR}/lctype.c
     ${LUA_DIR}/ldebug.c
-    ${LUA_DIR}/ldo.c
+    ${LUA_DIR}/ldo.c 
     ${LUA_DIR}/ldump.c
     ${LUA_DIR}/lfunc.c
     ${LUA_DIR}/lgc.c
@@ -48,4 +48,17 @@ set(SOL_DIR vendor/sol2)
 add_library(sol2 INTERFACE)
 target_include_directories(sol2 INTERFACE ${SOL_DIR}/include/)
 
-add_subdirectory(source)
+add_executable(nook-bindings source/main.cpp)
+
+target_link_libraries(nook-bindings
+    raylib
+    lua
+    sol2
+)
+
+target_include_directories(nook-bindings PUBLIC
+    vendor/lua
+    build/raylib/include
+    vendor/sol2/include
+    source/
+)
